@@ -1,5 +1,5 @@
-use std::fs;
-use zed_extension_api::{self as zed, LanguageServerId, Result, settings::LspSettings};
+use std::{fs, path};
+use zed_extension_api::{self as zed, LanguageServerId, Result, serde_json, settings::LspSettings};
 
 struct RoslynBinary {
     path: String,
@@ -95,7 +95,7 @@ impl RoslynCsharpExtension {
             .map_err(|err| format!("Failed to download file {err}"))?;
 
             zed::make_file_executable(&binary_path);
-            
+
             let entries =
                 fs::read_dir(".").map_err(|e| format!("failed to list working directory {e}"))?;
             for entry in entries {
@@ -104,7 +104,6 @@ impl RoslynCsharpExtension {
                     fs::remove_dir_all(entry.path()).ok();
                 }
             }
-            
         }
         self.cached_binary_path = Some(binary_path.clone());
         Ok(RoslynBinary {
@@ -132,9 +131,11 @@ impl zed::Extension for RoslynCsharpExtension {
             command: roslyn_binary.path,
             args: roslyn_binary.args.unwrap_or_else(|| {
                 vec![
+                    "--stdio".into(),
                     "--logLevel=Information".into(),
                     log_path,
-                    "--stdio".into(),
+                    "--razorSourceGenerator=/etc/profiles/per-user/genga/lib/roslyn-ls/Microsoft.CodeAnalysis.Razor.Compiler.dll".into(),
+                    "--razorDesignTimePath=/etc/profiles/per-user/genga/lib/rzls/Targets/Microsoft.NET.Sdk.Razor.DesignTime.targets".into(),
                 ]
             }),
             env: Default::default(),
