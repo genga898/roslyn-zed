@@ -1,5 +1,9 @@
 use std::{fs, path};
-use zed_extension_api::{self as zed, LanguageServerId, Result, serde_json, settings::LspSettings};
+use zed_extension_api::{
+    self as zed, LanguageServerId, Result,
+    serde_json::{self, json},
+    settings::LspSettings,
+};
 
 struct RoslynBinary {
     path: String,
@@ -140,6 +144,31 @@ impl zed::Extension for RoslynCsharpExtension {
             }),
             env: Default::default(),
         })
+    }
+
+    fn language_server_workspace_configuration(
+        &mut self,
+        _language_server_id: &LanguageServerId,
+        _worktree: &zed_extension_api::Worktree,
+    ) -> Result<Option<serde_json::Value>> {
+        let csharp_workspace_settings = json!({
+          "csharp|inlay_hints.csharp_enable_inlay_hints_for_implicit_object_creation": true,
+          "csharp|inlay_hints.csharp_enable_inlay_hints_for_implicit_variable_types": true,
+          "csharp|inlay_hints.csharp_enable_inlay_hints_for_lambda_parameter_types": true,
+          "csharp|inlay_hints.csharp_enable_inlay_hints_for_types": true,
+          "csharp|inlay_hints.dotnet_enable_inlay_hints_for_indexer_parameters": true,
+          "csharp|inlay_hints.dotnet_enable_inlay_hints_for_literal_parameters": true,
+          "csharp|inlay_hints.dotnet_enable_inlay_hints_for_object_creation_parameters": true,
+          "csharp|inlay_hints.dotnet_enable_inlay_hints_for_other_parameters": true,
+          "csharp|inlay_hints.dotnet_enable_inlay_hints_for_parameters": true,
+          "csharp|inlay_hints.dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix": true,
+          "csharp|inlay_hints.dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name": true,
+          "csharp|inlay_hints.dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent": true,
+          "csharp|code_lens.dotnet_enable_references_code_lens": true,
+          "csharp|formatting.dotnet_organize_imports_on_format": true,
+          "csharp|completion.dotnet_show_completion_items_from_unimported_namespaces": true,
+        });
+        Ok(Some(csharp_workspace_settings))
     }
 }
 
