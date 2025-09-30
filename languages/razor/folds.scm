@@ -11,4 +11,8 @@
   (razor_compound_using)
   (razor_section)
   (razor_block)
+  (class_declaration)
+  (method_declaration) 
+  (namespace_declaration)
+  (preproc_region)
 ] @fold

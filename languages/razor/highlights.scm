@@ -1,219 +1,215 @@
-; inherits: [c_sharp, html]
-
-; Razor Directives
-(razor_page_directive) @keyword.directive
-(razor_using_directive) @keyword.directive
-(razor_model_directive) @keyword.directive
-(razor_inject_directive) @keyword.directive
-(razor_namespace_directive) @keyword.directive
-(razor_implements_directive) @keyword.directive
-(razor_preservewhitespace_directive) @keyword.directive
-(razor_inherits_directive) @keyword.directive
-(razor_typeparam_directive) @keyword.directive
-(razor_layout_directive) @keyword.directive
-(razor_attribute_directive) @keyword.directive
-(razor_rendermode_directive) @keyword.directive
-(razor_section) @keyword.directive
-
-; Razor Control Flow
-(razor_if) @keyword.control.conditional
-(razor_else_if) @keyword.control.conditional
-(razor_else) @keyword.control.conditional
-(razor_for) @keyword.control.loop
-(razor_foreach) @keyword.control.loop
-(razor_while) @keyword.control.loop
-(razor_do_while) @keyword.control.loop
-(razor_switch) @keyword.control.conditional
-(razor_switch_case) @keyword.control.conditional
-(razor_switch_default) @keyword.control.conditional
-(razor_try) @keyword.control.exception
-(razor_catch) @keyword.control.exception
-(razor_finally) @keyword.control.exception
-(razor_lock) @keyword.control
-(razor_compound_using) @keyword.control
-
-; Razor Expressions
-(razor_implicit_expression) @variable
-(razor_explicit_expression) @variable
-(razor_escape) @constant.character.escape
-
-; Comments
-(razor_comment) @comment
-(html_comment) @comment
-
-; Razor Transitions
-(explicit_line_transition) @keyword.directive
-
-; Razor HTML Attributes
-(razor_html_attribute) @attribute.html
-(razor_attribute_name) @function
-(razor_attribute_modifier) @attribute.modifier
-(razor_attribute_value) @string
-
-; Razor Rendermode
-(razor_rendermode) @property
-
-(member_access_expression) @variable.member
-(typeof_expression) @keyword.operator
-(identifier) @variable
-
-(invocation_expression
-  function: (identifier) @function.call)
-
-(invocation_expression
-  function: (member_access_expression
-   name: (identifier) @function.call))
-
-(member_access_expression
-  name: (identifier) @property)
-
-(predefined_type) @type.builtin
-(qualified_name) @type
-(generic_name) @type.generic
+; inherits: c_sharp
 
 [
-  "at_page"
-  "at_using"
-  "at_model"
-  "at_rendermode"
-  "at_inject"
-  "at_implements"
-  "at_layout"
-  "at_inherits"
-  "at_attribute"
-  "at_typeparam"
-  "at_namespace"
-  "at_preservewhitespace"
-  "at_block"
-  "at_at_escape"
-  "at_colon_transition"
+  (razor_comment)
+  (html_comment)
+] @comment
+
+; HTML elements (basic highlighting)
+(element) @none
+
+; Razor HTML attributes - these are the exposed nodes
+(razor_html_attribute
+  (razor_attribute_name) @attribute
+  (razor_attribute_value) @string)
+(razor_attribute_modifier) @function.method
+(attribute_list) @attribute
+(modifier) @keyword.modifier
+
+; Directive nodes
+[
+  (razor_page_directive)
+  (razor_using_directive)
+  (razor_model_directive)
+  (razor_rendermode_directive)
+  (razor_inject_directive)
+  (razor_implements_directive)
+  (razor_layout_directive)
+  (razor_inherits_directive)
+  (razor_attribute_directive)
+  (razor_typeparam_directive)
+  (razor_namespace_directive)
+  (razor_preservewhitespace_directive)
+  (razor_block)
+  (razor_escape)
+  (explicit_line_transition)
 ] @constant.macro
 
+; Control flow directives
 [
-  "at_lock"
-  "at_section"
+  (razor_lock)
+  (razor_section)
 ] @keyword
 
+; Conditional directives
 [
-  "at_if"
-  "at_switch"
+  (razor_if)
+  (razor_switch)
 ] @keyword.conditional
 
+; Loop directives
 [
-  "at_for"
-  "at_foreach"
-  "at_while"
-  "at_do"
+  (razor_for)
+  (razor_foreach)
+  (razor_while)
+  (razor_do_while)
 ] @keyword.repeat
 
+; Exception handling
 [
-  "at_try"
-  "catch"
-  "finally"
+  (razor_try)
+  (razor_catch)
+  (razor_finally)
 ] @keyword.exception
 
+; Expressions
 [
-  "at_implicit"
-  "at_explicit"
+  (razor_implicit_expression)
+  (razor_explicit_expression)
 ] @variable
 
-"at_await" @keyword.coroutine
+(razor_await_expression) @keyword.coroutine
 
-; C# Keywords
-[
-  "public"
-  "private"
-  "protected"
-  "internal"
-  "static"
-  "readonly"
-  "const"
-  "virtual"
-  "override"
-  "abstract"
-  "sealed"
-  "partial"
-  "async"
-  "await"
-  "var"
-  "typeof"
-] @keyword
+; Special nodes
+(razor_rendermode) @property
 
-; C# Control Flow
 [
-  "if"
-  "else"
-  "for"
-  "foreach"
-  "while"
-  "do"
-  "switch"
-  "case"
-  "default"
-  "break"
-  "continue"
-  "return"
-  "goto"
-] @keyword.control
+  (boolean_literal)
+  (null_literal)
+] @constant.builtin
 
-; C# Exception Handling
 [
-  "try"
-  "catch"
-  "finally"
-  "throw"
-] @keyword.control.exception
+  (integer_literal)
+  (real_literal)
+] @number
 
-; Operators
 [
+  (character_literal)
+  (string_literal)
+  (verbatim_string_literal)
+  (raw_string_literal)
+] @string
+
+(string_literal_content) @string
+(escape_sequence) @string.escape
+ 
+;; Types
+(predefined_type) @type.builtin
+(generic_name) @type
+(qualified_name) @type
+(typeof_expression) @type
+(interface_declaration name: (identifier) @type)
+(class_declaration name: (identifier) @type)
+(enum_declaration name: (identifier) @type)
+(struct_declaration (identifier) @type)
+(record_declaration (identifier) @type)
+
+; Method and property declarations within Razor blocks
+(method_declaration name: (identifier) @function)
+(property_declaration name: (identifier) @property)
+(field_declaration) @variable.member
+
+[
+  "--"
+  "-"
+  "-="
+  "&"
+  "&="
+  "&&"
+  "+"
+  "++"
+  "+="
+  "<"
+  "<="
+  "<<"
+  "<<="
   "="
   "=="
-  "!="
-  "<"
-  ">"
-  "<="
-  ">="
-  "&&"
-  "||"
   "!"
-  "+"
-  "-"
+  "!="
+  "=>"
+  ">"
+  ">="
+  ">>"
+  ">>="
+  ">>>"
+  ">>>="
+  "|"
+  "|="
+  "||"
+  "?"
+  "??"
+  "??="
+  "^"
+  "^="
+  "~"
   "*"
+  "*="
   "/"
+  "/="
   "%"
+  "%="
+  ":"
 ] @operator
 
-; Punctuation
 [
-  "("
-  ")"
-  "["
-  "]"
-  "{"
-  "}"
-] @punctuation.bracket
+ "."
+ ","
+ ";"
+ ":"
+ "::"
+ ] @punctuation.delimiter
 
 [
-  ";"
-  ","
-  "."
-] @punctuation.delimiter
+ "("
+ ")"
+ "["
+ "]"
+ "{"
+ "}"
+ ] @punctuation.bracket
 
-; Razor @ symbol
-"@" @operator
+; C# preprocessor support
+[
+  (preproc_if)
+  (preproc_define)
+  (preproc_region)
+  (preproc_endregion)
+] @constant.macro
+
+(attribute name: (identifier) @attribute)
+
+; Functions
+(local_function_statement name: (identifier) @function)
+(invocation_expression function:
+    (member_access_expression
+        expression: (identifier) @type
+        name: (identifier) @method.call)
+)
+
+; Pattern matching
+(is_pattern_expression) @keyword.operator
+(negated_pattern) @operator
+(constant_pattern) @pattern
+
+; Object creation
+[
+  (implicit_object_creation_expression)
+  (object_creation_expression)
+] @constructor
 
 ; Variable declarations
-(variable_declarator
-  (identifier) @variable.declaration)
+(variable_declarator name: (identifier) @variable)
+(variable_declaration type: (identifier) @type)
 
-; Parameters
-(parameter
-  name: (identifier) @parameter)
+; Parameter and argument lists
+(parameter_list) @punctuation.bracket
+(argument_list) @punctuation.bracket
 
-(string_literal) @string
-(string_literal_content) @string
-(character_literal) @character
-(integer_literal) @number
-(real_literal) @number.float
-(boolean_literal) @constant.builtin.boolean
-(null_literal) @constant.builtin.null
+; Assignment operators (more specific)
+(assignment_expression "=" @operator.assignment)
+
+(member_access_expression
+    expression: (identifier) @variable
+    name: (identifier) @property
+)
