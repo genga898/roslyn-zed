@@ -1,0 +1,15 @@
+id = "roslyn"
+name = "csharp-roslyn"
+version = "0.0.1"
+schema_version = 1
+authors = ["Emmanuel Genga <genga898@gmail.com>"]
+description = "C# Language Support."
+repository = "https://github.com/genga898/roslyn-zed"
+
+[grammars.c_sharp]
+repository = "https://github.com/tree-sitter/tree-sitter-c-sharp"
+commit = "3431444351c871dffb32654f1299a00019280f2f"
+
+[grammars.razor]
+repository = "https://github.com/tris203/tree-sitter-razor"
+commit = "fe46ce5ea7d844e53d59bc96f2175d33691c61c5"
