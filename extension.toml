@@ -3,7 +3,7 @@ name = "csharp-roslyn"
 version = "0.0.1"
 schema_version = 1
 authors = ["Emmanuel Genga <genga898@gmail.com>"]
-description = "C# Language Support."
+description = "C# and Razor syntax highlighting support"
 repository = "https://github.com/genga898/roslyn-zed"
 
 [grammars.c_sharp]
